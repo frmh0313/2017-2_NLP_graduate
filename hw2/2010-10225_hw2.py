@@ -79,7 +79,7 @@ def hedge(corpus):
         f.close()
 
 
-if __name__ == '__main__':
+def main():
     print("# 15")
     pprint(occur_at_least_three())
     print()
@@ -117,3 +117,8 @@ if __name__ == '__main__':
     print("# 22")
     hedge(brown.words(fileids=['ca01']))
     print()
+
+
+if __name__ == '__main__':
+    main()
+
