@@ -5,19 +5,20 @@ from pprint import pprint
 
 # 15
 def occur_at_least_three():
-    # brown_words = list(brown.words(fileids=['ca01']))
     brown_words = brown.words()
     result = [word for (word, count) in dict(nltk.FreqDist(brown_words)).items() if count > 3]
     return result
 
 
+print("# 15")
 pprint(occur_at_least_three())
+print()
 
 
 # 16
 def lexical_diversity_genres():
     genres = brown.categories()
-    print('{:16}'.format('Category'), end= ' ')
+    print('{:16}'.format('Category'), end=' ')
     print('{:>20}'.format('Lexical diversity'))
     for genre in genres:
         words = brown.words(categories=[genre])
@@ -28,15 +29,13 @@ def lexical_diversity_genres():
         print('{:20}'.format(lexical_diversity))
 
 
+print("# 16")
 lexical_diversity_genres()
-
-# TODO
-# 조교 문의 -> preprocess한 걸로 해야되는지, 아니면 그냥 brown corpus에서 바로 가져온 것으로 해야하는지
+print()
 
 
 # 17
-# preprocessed
-def most_50_excluding_stopwords_preprocessed():
+def most_50_without_stopwords():
     brown_words = brown.words()
     stopwords = nltk.corpus.stopwords.words('english')
     lowercased_words = [w.lower() for w in brown_words if w.isalpha()]
@@ -44,15 +43,9 @@ def most_50_excluding_stopwords_preprocessed():
     return fdist.most_common(50)
 
 
-'''
-def most_50_excluding_stopwords():
-    stopwords = nltk.corpus.stopwords.words('english')
-    fdist = nltk.FreqDist(word for word in brown_words if word.lower() not in stopwords)
-    return fdist.most_common(50)
-
-'''
-# print(most_50_excluding_stopwords())
-pprint(most_50_excluding_stopwords_preprocessed())
+print("# 17")
+pprint(most_50_without_stopwords())
+print()
 
 
 # 18
@@ -67,9 +60,27 @@ def most_50_bigrams_without_stopwords():
     return fdist.most_common(50)
 
 
+print("# 18")
 pprint(most_50_bigrams_without_stopwords())
+print()
+
 
 # 19
+def genre_and_words():
+    genres = brown.categories()
+    words = ['president', 'character', 'news', 'book', 'love', 'faith',
+             'science', 'happy', 'government', 'war', 'possibility', 'politics']
+    cfd = nltk.ConditionalFreqDist(
+            (genre, word)
+            for genre in genres
+            for word in brown.words(categories=genre)
+        )
+    pprint(cfd.tabulate(conditions=genres, samples=words))
+
+
+print("# 19")
+genre_and_words()
+print()
 
 
 # 20
@@ -79,7 +90,9 @@ def word_freq(word, section):
     return fdist[word]
 
 
+print("# 20")
 print("'new' appears %d times in the 'news' category of Brown corpus" % word_freq('new', 'news'))
+print()
 
 
 # string input?
@@ -92,6 +105,10 @@ def hedge(text):
     return ' '.join(l)
 
 
-text = "Define a function hedge(text) which processes a text and produces a new version with the word 'like' between every third word."
+text = "Define a function hedge(text) which processes a text and produces a new version " \
+       "with the word 'like' between every third word."
 
-print(hedge(text))
+print("# 22")
+print("Input:", text)
+print("Output:", hedge(text))
+print()
