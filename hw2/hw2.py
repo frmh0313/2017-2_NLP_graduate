@@ -2,6 +2,7 @@ import nltk
 from nltk.corpus import brown
 from pprint import pprint
 
+
 # 15
 def occur_at_least_three():
     # brown_words = list(brown.words(fileids=['ca01']))
@@ -12,17 +13,28 @@ def occur_at_least_three():
 
 pprint(occur_at_least_three())
 
+
 # 16
+def lexical_diversity_genres():
+    genres = brown.categories()
+    print('{:16}'.format('Category'), end= ' ')
+    print('{:>20}'.format('Lexical diversity'))
+    for genre in genres:
+        words = brown.words(categories=[genre])
+        num_words = len(words)
+        num_vocab = len(set(w.lower() for w in words))
+        lexical_diversity = num_words/num_vocab
+        print('{:16}'.format(genre), end=' ')
+        print('{:20}'.format(lexical_diversity))
 
-# 17
 
+lexical_diversity_genres()
 
-'''
 # TODO
 # 조교 문의 -> preprocess한 걸로 해야되는지, 아니면 그냥 brown corpus에서 바로 가져온 것으로 해야하는지
-'''
 
 
+# 17
 # preprocessed
 def most_50_excluding_stopwords_preprocessed():
     brown_words = brown.words()
@@ -30,11 +42,14 @@ def most_50_excluding_stopwords_preprocessed():
     lowercased_words = [w.lower() for w in brown_words if w.isalpha()]
     fdist = nltk.FreqDist(word for word in lowercased_words if word not in stopwords)
     return fdist.most_common(50)
+
+
 '''
-# def most_50_excluding_stopwords():
-#     stopwords = nltk.corpus.stopwords.words('english')
-#     fdist = nltk.FreqDist(word for word in brown_words if word.lower() not in stopwords)
-#     return fdist.most_common(50)
+def most_50_excluding_stopwords():
+    stopwords = nltk.corpus.stopwords.words('english')
+    fdist = nltk.FreqDist(word for word in brown_words if word.lower() not in stopwords)
+    return fdist.most_common(50)
+
 '''
 # print(most_50_excluding_stopwords())
 pprint(most_50_excluding_stopwords_preprocessed())
