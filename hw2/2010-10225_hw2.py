@@ -57,7 +57,6 @@ def genre_and_words():
         for word in brown.words(categories=genre)
     )
     cfd.tabulate(conditions=genres, samples=words)
-    cfd.plot(conditions=genres, samples=words)
 
 
 # 20
