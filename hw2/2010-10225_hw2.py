@@ -75,7 +75,6 @@ def hedge(corpus):
                 word_list.insert(i, 'like')
         modified = ' '.join(word_list)
         f.write(modified)
-        f.close()
 
 
 def main():
