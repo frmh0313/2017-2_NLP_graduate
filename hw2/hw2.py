@@ -35,7 +35,7 @@ print()
 
 
 # 17
-def most_50_without_stopwords():
+def most_50_words_without_stopwords():
     brown_words = brown.words()
     stopwords = nltk.corpus.stopwords.words('english')
     lowercased_words = [w.lower() for w in brown_words if w.isalpha()]
@@ -44,7 +44,7 @@ def most_50_without_stopwords():
 
 
 print("# 17")
-pprint(most_50_without_stopwords())
+pprint(most_50_words_without_stopwords())
 print()
 
 
@@ -75,7 +75,7 @@ def genre_and_words():
             for genre in genres
             for word in brown.words(categories=genre)
         )
-    pprint(cfd.tabulate(conditions=genres, samples=words))
+    cfd.tabulate(conditions=genres, samples=words)
 
 
 print("# 19")
