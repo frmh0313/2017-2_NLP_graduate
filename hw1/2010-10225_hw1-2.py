@@ -21,7 +21,10 @@ def pig_latin(file, out='./output.txt'):
     end_with_non_alpha = re.compile(r'(.*?)([\W_]+)$')
 
     start_with_qu = re.compile(r'^([qQ][uU][^\W\dAEIOUYaeiouy_])(.*)')
-    consonants_with_qu = re.compile(r'^([^\W\dAEIOUYaeiouy_]+[qQ][uU][^\W\dAEIOUYaeiouy_]*)(.*)')
+    #consonants_with_qu = re.compile(r'^([^\W\dAEIOUYaeiouy_]+[qQ][uU][^\W\dAEIOUYaeiouy_]*)(.*)')
+    consonants_qu = re.compile(r'^([^\W\dAEIOUYaeiouy_]+[qQ][uU][^\W\dAEIOUYaeiouy_]*)(.*)')
+    qu_consonants = re.compile(r'^([^\W\dAEIOUYaeiouy]*[qQ][uU][^\W\dAEIOUYaeiouy_]+)(.*)')
+
     consonants_without_qu = re.compile(r'^([^\W\dAEIOUYaeiouy_]+)(.*)')
     start_with_y = re.compile(r'^([yY][^\W\dAEIOUYaeiouy_]*)(.*)')
 
@@ -44,10 +47,14 @@ def pig_latin(file, out='./output.txt'):
             word = is_end_with_non_alpha.group(1)
 
         is_start_with_y = start_with_y.match(word)
-        is_start_with_qu = start_with_qu.match(word)
         is_start_with_consonants_without_qu = consonants_without_qu.match(word)
-        is_start_with_consonants_with_qu = consonants_with_qu.match(word)
+        #is_start_with_consonants_with_qu = consonants_with_qu.match(word)
+        is_start_with_consonants_qu = consonants_qu.match(word)
+        is_start_with_qu_consonants = qu_consonants.match(word)
+        is_start_with_qu = start_with_qu.match(word)
 
+
+        '''
         if is_start_with_y: # y가 자음인 경우: y로 시작하는 경우
             w += is_start_with_y.group(2) + is_start_with_y.group(1)
         elif is_start_with_qu: # qu로 시작하는 경우
@@ -57,6 +64,18 @@ def pig_latin(file, out='./output.txt'):
         elif is_start_with_consonants_without_qu: # qu를 제외한 자음으로 시작하는 경우
             w += is_start_with_consonants_without_qu.group(2) + is_start_with_consonants_without_qu.group(1)
         else: # 모음으로 시작하는 경우
+            w += word
+        '''
+
+        if is_start_with_y: # y가 자음인 경우: y로 시작하는 경우
+            w += is_start_with_y.group(2) + is_start_with_y.group(1)
+        elif is_start_with_consonants_qu: # 자음 + qu (+ 자음)*인 경우
+            w += is_start_with_consonants_qu.group(2) + is_start_with_consonants_qu(1)
+        elif is_start_with_qu_consonants: # (자음)* + qu + 자음인 경우
+            w += is_start_with_qu_consonants.group(2) + is_start_with_qu_consonants(1)
+        elif is_start_with_qu: # qu + 모음인 경우
+            w += is_start_with_qu.group(2) + is_start_with_qu.group(1)
+        else:  # 모음으로 시작하는 경우
             w += word
 
         w += "ay"
