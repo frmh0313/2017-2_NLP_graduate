@@ -9,7 +9,7 @@ JAMO = []
 JAMO.extend(INITIAL_JAMO, MED_JAMO, FINAL_JAMO)
 
 
-def string_unigram_decoder(string):
+def unigram_decoder(string):
     result = []
     for character in string:
         result.extend(hangul_decoder_modified.decodeSyllable(character))
@@ -17,7 +17,7 @@ def string_unigram_decoder(string):
 
 
 def bigram_generator(string):
-    unigrams = string_unigram_decoder(string)
+    unigrams = unigram_decoder(string)
     bigrams = []
     for i in range(len(unigrams) - 1):
         if i == 0:
