@@ -40,14 +40,24 @@ def counter(decoded_list):
     return total_count, jamo_count
 
 
-def entropy(total_count, jamo_count):
+def entropy(total_count, jamo_counts):
     result = 0
-    for jamo in jamo_count:
-        probability = jamo_count[jamo]/total_count
+    for jamo in jamo_counts:
+        probability = jamo_counts[jamo]/total_count
         result += -probability * math.log2(probability)
     return result
 
 
-def cross_entropy(training_total_count, training_count, test_total_count, test_count):
+def cross_entropy(training_total_count, training_counts, test_total_count, test_counts):
+    result = 0
+    training_probabilities = {(key, training_counts[key]/training_total_count) for key in training_counts.keys()}
+    test_probabilities = {(key, test_counts[key]/test_total_count) for key in test_counts.keys()}
+
+    key_list = training_counts.keys() # key list of training_counts and test_counts are same.
+    for key in key_list:
+        result += -test_probabilities[key] * math.log2(training_probabilities[key])
+
+    return result
+
 
 
