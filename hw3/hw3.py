@@ -108,7 +108,7 @@ def printer(name, count, entropy, cross_entropy):
     print("count:", str(count))
     print("entropy:", str(entropy))
     print("cross_entropy:", str(cross_entropy))
-    print("difference:",str(entropy - cross_entropy))
+    print("difference:", str(entropy - cross_entropy))
 
 
 def pprinter(name, jamo_unigram, jamo_bigram, syllables_unigram, syllables_bigram):
@@ -117,22 +117,23 @@ def pprinter(name, jamo_unigram, jamo_bigram, syllables_unigram, syllables_bigra
     syllables_unigram_entropy, syllables_unigram_cross_entropy = syllables_unigram
     syllables_bigram_entropy, syllables_bigram_cross_entropy = syllables_bigram
 
-    print("{:>70} {:>20} {:>15}".format("entropy", "cross-entropy", "Difference"))
-    print("{:<20} {:>15} {:>15} {:>20} {:>20} {:>15}".format(name, "자소별", "unigram",
+    print("{:>67} {:>25} {:>20}".format("entropy", "cross-entropy", "Difference"))
+    print("{:<20} {:>10} {:>15}  {:>20} {:>23} {:>22}".format(name, "자소별", "unigram",
                                                             jamo_unigram_entropy,
                                                             jamo_unigram_cross_entropy,
                                                             jamo_unigram_entropy - jamo_unigram_cross_entropy))
-    print("{:>52} {:>20} {:>20} {:>15}".format("bigram",
+    print("{:>48} {:>21} {:>23} {:>22}".format("bigram",
                                                jamo_bigram_entropy,
                                                jamo_bigram_cross_entropy,
                                                jamo_bigram_entropy - jamo_bigram_cross_entropy))
-    print("{:>35} {:>15} {:>20} {:>20} {:>15}".format("음절별", "unigram",
+    print("{:>31} {:>15}  {:>20} {:>23} {:>22}".format("음절별", "unigram",
                                                       syllables_unigram_entropy,
                                                       syllables_unigram_cross_entropy,
                                                       syllables_unigram_entropy - syllables_unigram_cross_entropy))
-    print("{:>52} {:>20} {:>20} {:>15}".format("bigram",
+    print("{:>48}  {:>20} {:>23} {:>22}".format("bigram",
                                                syllables_bigram_entropy,
                                                syllables_bigram_cross_entropy,
                                                syllables_bigram_entropy - syllables_bigram_cross_entropy))
+    print()
 
 
