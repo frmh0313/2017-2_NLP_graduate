@@ -3,70 +3,19 @@ import hangul_decoder_modified
 import math
 
 
-def new_training_set_with_UNK_optimized_with_hash(training_decoded, test_decoded):
-    result = []
-    checked = {}
-    for token in test_decoded:
-        if hash(token) in checked.keys():
-            result.append(token)
-        else:
-            if token in training_decoded:
-                checked[hash(token)] = token
-                result.append(token)
-            else:
-                result.append('<UNK>')
-    return result
-
-
 def new_training_set_with_UNK_optimized(training_decoded, test_decoded):
     result = []
-    checked = []
-    for token in test_decoded:
-        if token in checked:
-            result.append(token)
-        else:
-            if token in training_decoded:
-                checked.append(token)
-                result.append(token)
-            else:
-                result.append('<UNK>')
-    return result
-
-
-def new_training_set_with_UNK_optimized_using_set(training_decoded, test_decoded):
-    result = []
     training_set = set(training_decoded)
-    for token in test_decoded:
-        if token in training_set:
-            result.append(token)
-        else:
-            result.append('<UNK>')
-    return result
-
-
-def new_training_set_with_UNK_optimized_using_set_and_checked(training_decoded, test_decoded):
-    result = []
-    training_set = set(training_decoded)
-    checked = {}
+    checked = set()
     for token in test_decoded:
         if token in checked:
             result.append(token)
         else:
             if token in training_set:
-                checked.append(token)
+                checked.add(token)
                 result.append(token)
             else:
                 result.append('<UNK>')
-    return result
-
-
-def new_training_set_with_UNK(training_decoded, test_decoded):
-    result = []
-    for token in test_decoded:
-        if token in training_decoded:
-            result.append(token)
-        else:
-            result.append('<UNK>')
     return result
 
 
