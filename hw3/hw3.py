@@ -105,3 +105,9 @@ def printer(name, jamo_unigram, jamo_bigram, syllables_unigram, syllables_bigram
     print()
 
 
+
+# TODO
+'''
+Difference check. 
+전체적인 알고리즘 체크.
+'''
