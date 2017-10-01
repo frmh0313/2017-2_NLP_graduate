@@ -3,22 +3,6 @@ import hangul_decoder_modified
 import math
 
 
-def new_training_set_with_UNK_optimized(training_decoded, test_decoded):
-    result = []
-    training_set = set(training_decoded)
-    checked = set()
-    for token in test_decoded:
-        if token in checked:
-            result.append(token)
-        else:
-            if token in training_set:
-                checked.add(token)
-                result.append(token)
-            else:
-                result.append('<UNK>')
-    return result
-
-
 def jamo_unigram_decode(string):
     result = []
     blank_removed = string.replace(' ', '').replace('\n', '').replace('\t', '')
@@ -31,21 +15,6 @@ def jamo_unigram_decode(string):
 def syllables_unigram_decode(string):
     return list(string.replace(' ', '').replace('\n', '').replace('\t', ''))
 
-'''
-def bigram(unigrams):
-    bigrams = []
-    for i in range(len(unigrams) - 1):
-        if i == 0:
-            bigrams.append(('<s>', unigrams[i]))
-            bigrams.append((unigrams[i], unigrams[i+1]))
-        elif i == len(unigrams) -1 :
-            bigrams.append((unigrams[i], '</s>'))
-        else:
-            single_bigram = (unigrams[i], unigrams[i+1])
-            if single_bigram not in bigrams:
-                bigrams.append(single_bigram)
-    return bigrams
-'''
 
 def bigram(unigrams):
     bigrams = []
@@ -59,19 +28,6 @@ def bigram(unigrams):
             bigrams.append((unigrams[i], unigrams[i+1]))
     return bigrams
 
-'''
-
-def counter(test_decoded, training_decoded):
-    total_count = len(test_decoded)
-    counts = {}
-    for char in test_decoded:
-        if char in training_decoded:
-            counts[char] = counts[char] + 1 if char in counts.keys() else 1
-        else: # test set에는 있지만 training set에는 들어있지 않은 단어의 경우 '<UNK>'로 처리하여 test counter dict에 저장.
-            counts['<UNK>'] = counts['<UNK>'] + 1 if '<UNK>' in counts.keys() else 1
-    return total_count, counts
-'''
-
 
 def counter(decoded_list):
     total_count = len(decoded_list)
@@ -79,6 +35,26 @@ def counter(decoded_list):
     for char in decoded_list:
         counts[char] = counts[char] + 1 if char in counts.keys() else 1
     return total_count, counts
+
+
+def new_training_set_with_UNK_optimized(training_decoded, test_decoded):
+    """
+    training set에 없는 단어가 test set에 나온 경우를 위해
+    test set에서 training set에 없는 단어를 '<UNK>'로 바꾼 새로운 training set을 만듦
+    """
+    result = []
+    training_set = set(training_decoded)
+    checked = set()
+    for token in test_decoded:
+        if token in checked:
+            result.append(token)
+        else:
+            if token in training_set:
+                checked.add(token)
+                result.append(token)
+            else:
+                result.append('<UNK>')
+    return result
 
 
 def entropy(total_count, jamo_counts):
@@ -103,15 +79,7 @@ def cross_entropy(training_total_count, training_counts, test_total_count, test_
     return result
 
 
-def printer(name, count, entropy, cross_entropy):
-    print("#########", name, "#########")
-    print("count:", str(count))
-    print("entropy:", str(entropy))
-    print("cross_entropy:", str(cross_entropy))
-    print("difference:", str(entropy - cross_entropy))
-
-
-def pprinter(name, jamo_unigram, jamo_bigram, syllables_unigram, syllables_bigram):
+def printer(name, jamo_unigram, jamo_bigram, syllables_unigram, syllables_bigram):
     jamo_unigram_entropy, jamo_unigram_cross_entropy = jamo_unigram
     jamo_bigram_entropy, jamo_bigram_cross_entropy = jamo_bigram
     syllables_unigram_entropy, syllables_unigram_cross_entropy = syllables_unigram
