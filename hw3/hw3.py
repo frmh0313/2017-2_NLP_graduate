@@ -19,15 +19,6 @@ def new_training_set_with_UNK_optimized(training_decoded, test_decoded):
     return result
 
 
-def unigram_decoder(string):
-    result = []
-    blank_removed = string.replace(' ', '').replace('\n', '').replace('\t', '')
-
-    for character in blank_removed:
-        result.extend(hangul_decoder_modified.decodeSyllable(character))
-    return result
-
-
 def jamo_unigram_decode(string):
     result = []
     blank_removed = string.replace(' ', '').replace('\n', '').replace('\t', '')
@@ -40,9 +31,8 @@ def jamo_unigram_decode(string):
 def syllables_unigram_decode(string):
     return list(string.replace(' ', '').replace('\n', '').replace('\t', ''))
 
-
-def bigram_generator(string):
-    unigrams = unigram_decoder(string)
+'''
+def bigram(unigrams):
     bigrams = []
     for i in range(len(unigrams) - 1):
         if i == 0:
@@ -55,7 +45,19 @@ def bigram_generator(string):
             if single_bigram not in bigrams:
                 bigrams.append(single_bigram)
     return bigrams
+'''
 
+def bigram(unigrams):
+    bigrams = []
+    for i in range(len(unigrams) -1):
+        if i == 0:
+            bigrams.append(('<s>', unigrams[i]))
+            bigrams.append((unigrams[i], unigrams[i+1]))
+        elif i == len(unigrams) -1:
+            bigrams.append((unigrams[i], '</s>'))
+        else:
+            bigrams.append((unigrams[i], unigrams[i+1]))
+    return bigrams
 
 '''
 
@@ -92,18 +94,10 @@ def cross_entropy(training_total_count, training_counts, test_total_count, test_
     training_probabilities = {key: float(training_counts[key])/training_total_count for key in training_counts.keys()}
     test_probabilities = {key: float(test_counts[key])/test_total_count for key in test_counts.keys()}
 
-    # key_list = training_counts.keys() # key list of training_counts and test_counts are same.
-    """
-    @ Test corpus에는 들어있지만 training corpus에 들어있지 않은 경우 -> <UNK>로 처리
-    @ Training corpus에는 들어있지만 test corpus에는 들어있지 않은 경우 -> 그냥 계산 안되니까 상관없음.
-    -> Training corpus 수정 필요. Test corpus에서 원래의 training corpus에 들어있지 않은 것은 <UNK>로 바꿔서 계산한 새로운 corpus.
-    """
-
     for key in test_counts.keys():
         if key in training_probabilities.keys():
             result += -test_probabilities[key] * math.log2(training_probabilities[key])
         else:
-            # training_probabilites['<UNK.']가 사용가능하도록 training_corpus 수정 필요함.
             result += -test_probabilities[key] * math.log2(training_probabilities['<UNK>'])
 
     return result
@@ -114,3 +108,31 @@ def printer(name, count, entropy, cross_entropy):
     print("count:", str(count))
     print("entropy:", str(entropy))
     print("cross_entropy:", str(cross_entropy))
+    print("difference:",str(entropy - cross_entropy))
+
+
+def pprinter(name, jamo_unigram, jamo_bigram, syllables_unigram, syllables_bigram):
+    jamo_unigram_entropy, jamo_unigram_cross_entropy = jamo_unigram
+    jamo_bigram_entropy, jamo_bigram_cross_entropy = jamo_bigram
+    syllables_unigram_entropy, syllables_unigram_cross_entropy = syllables_unigram
+    syllables_bigram_entropy, syllables_bigram_cross_entropy = syllables_bigram
+
+    print("{:>70} {:>20} {:>15}".format("entropy", "cross-entropy", "Difference"))
+    print("{:<20} {:>15} {:>15} {:>20} {:>20} {:>15}".format(name, "자소별", "unigram",
+                                                            jamo_unigram_entropy,
+                                                            jamo_unigram_cross_entropy,
+                                                            jamo_unigram_entropy - jamo_unigram_cross_entropy))
+    print("{:>52} {:>20} {:>20} {:>15}".format("bigram",
+                                               jamo_bigram_entropy,
+                                               jamo_bigram_cross_entropy,
+                                               jamo_bigram_entropy - jamo_bigram_cross_entropy))
+    print("{:>35} {:>15} {:>20} {:>20} {:>15}".format("음절별", "unigram",
+                                                      syllables_unigram_entropy,
+                                                      syllables_unigram_cross_entropy,
+                                                      syllables_unigram_entropy - syllables_unigram_cross_entropy))
+    print("{:>52} {:>20} {:>20} {:>15}".format("bigram",
+                                               syllables_bigram_entropy,
+                                               syllables_bigram_cross_entropy,
+                                               syllables_bigram_entropy - syllables_bigram_cross_entropy))
+
+
