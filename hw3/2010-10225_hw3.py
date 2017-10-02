@@ -41,7 +41,7 @@ def counter(decoded_list):
     return total_count, counts
 
 
-def new_training_set_with_UNK_optimized(training_decoded, test_decoded):
+def new_training_set_with_UNK(training_decoded, test_decoded):
     """
     training set에 없는 단어가 test set에 나온 경우를 위해
     test set에서 training set에 없는 단어를 '<UNK>'로 바꾼 새로운 training set을 만듦
@@ -167,7 +167,7 @@ if __name__ == '__main__':
     # Sejong.nov.Test jamo unigram
     test_jamo_unigram = jamo_unigram_decode(sejong_test_raw)
     test_jamo_unigram_count = counter(test_jamo_unigram)
-    training_test_jamo_unigram = new_training_set_with_UNK_optimized(training_jamo_unigram, test_jamo_unigram)
+    training_test_jamo_unigram = new_training_set_with_UNK(training_jamo_unigram, test_jamo_unigram)
     training_test_jamo_unigram_count = counter(training_test_jamo_unigram)
     test_jamo_unigram_entropy = entropy(*test_jamo_unigram_count)
     test_jamo_unigram_cross_entropy = cross_entropy(*training_test_jamo_unigram_count, *test_jamo_unigram_count)
@@ -176,7 +176,7 @@ if __name__ == '__main__':
     # Sejong.nov.Test jamo bigram
     test_jamo_bigram = bigram(test_jamo_unigram)
     test_jamo_bigram_count = counter(test_jamo_bigram)
-    training_test_jamo_bigram = new_training_set_with_UNK_optimized(training_jamo_bigram, test_jamo_bigram)
+    training_test_jamo_bigram = new_training_set_with_UNK(training_jamo_bigram, test_jamo_bigram)
     training_test_jamo_bigram_count = counter(training_test_jamo_bigram)
     test_jamo_bigram_entropy = entropy(*test_jamo_bigram_count)
     test_jamo_bigram_cross_entropy = cross_entropy(*training_test_jamo_bigram_count, *test_jamo_bigram_count)
@@ -185,8 +185,8 @@ if __name__ == '__main__':
     # Sejong.nov.Test syllables unigram
     test_syllables_unigram = syllables_unigram_decode(sejong_test_raw)
     test_syllables_unigram_count = counter(test_syllables_unigram)
-    test_training_syllables_unigram = new_training_set_with_UNK_optimized(training_syllables_unigram,
-                                                                          test_syllables_unigram)
+    test_training_syllables_unigram = new_training_set_with_UNK(training_syllables_unigram,
+                                                                test_syllables_unigram)
     test_training_syllables_unigram_count = counter(test_training_syllables_unigram)
     test_syllables_unigram_entropy = entropy(*test_syllables_unigram_count)
     test_syllables_unigram_cross_entropy = cross_entropy(*test_training_syllables_unigram_count,
@@ -196,8 +196,8 @@ if __name__ == '__main__':
     # Sejong.nov.Test syllables bigram
     test_syllables_bigram = bigram(test_syllables_unigram)
     test_syllables_bigram_count = counter(test_syllables_bigram)
-    training_test_syllables_bigram = new_training_set_with_UNK_optimized(training_syllables_bigram,
-                                                                         test_syllables_bigram)
+    training_test_syllables_bigram = new_training_set_with_UNK(training_syllables_bigram,
+                                                               test_syllables_bigram)
     training_test_syllables_bigram_count = counter(training_test_syllables_bigram)
     test_syllables_bigram_entropy = entropy(*test_syllables_bigram_count)
     test_syllables_bigram_cross_entropy = cross_entropy(*training_test_syllables_bigram_count,
@@ -211,7 +211,7 @@ if __name__ == '__main__':
     # Hani.Test jamo unigram
     hani_jamo_unigram = jamo_unigram_decode(hani_test_raw)
     hani_jamo_unigram_count = counter(hani_jamo_unigram)
-    training_hani_test_jamo_unigram = new_training_set_with_UNK_optimized(training_jamo_unigram, hani_jamo_unigram)
+    training_hani_test_jamo_unigram = new_training_set_with_UNK(training_jamo_unigram, hani_jamo_unigram)
     training_hani_jamo_unigram_count = counter(training_hani_test_jamo_unigram)
     hani_jamo_unigram_entropy = entropy(*hani_jamo_unigram_count)
     hani_jamo_unigram_cross_entropy = cross_entropy(*training_hani_jamo_unigram_count, *hani_jamo_unigram_count)
@@ -220,7 +220,7 @@ if __name__ == '__main__':
     # Hani.Test jamo bigram
     hani_jamo_bigram = bigram(hani_jamo_unigram)
     hani_jamo_bigram_count = counter(hani_jamo_bigram)
-    training_hani_jamo_bigram = new_training_set_with_UNK_optimized(training_jamo_bigram, hani_jamo_bigram)
+    training_hani_jamo_bigram = new_training_set_with_UNK(training_jamo_bigram, hani_jamo_bigram)
     training_hani_jamo_bigram_count = counter(training_hani_jamo_bigram)
     hani_jamo_bigram_entropy = entropy(*hani_jamo_bigram_count)
     hani_jamo_bigram_cross_entropy = cross_entropy(*training_hani_jamo_bigram_count, *hani_jamo_bigram_count)
@@ -229,8 +229,8 @@ if __name__ == '__main__':
     # Hani.Test syllables unigram
     hani_syllables_unigram = syllables_unigram_decode(hani_test_raw)
     hani_syllables_unigram_count = counter(hani_syllables_unigram)
-    training_hani_syllables_unigram = new_training_set_with_UNK_optimized(training_syllables_unigram,
-                                                                          hani_syllables_unigram)
+    training_hani_syllables_unigram = new_training_set_with_UNK(training_syllables_unigram,
+                                                                hani_syllables_unigram)
     training_hani_syllables_unigram_count = counter(training_hani_syllables_unigram)
     hani_syllables_unigram_entropy = entropy(*hani_syllables_unigram_count)
     hani_syllables_unigram_cross_entropy = cross_entropy(*training_hani_syllables_unigram_count,
@@ -240,8 +240,8 @@ if __name__ == '__main__':
     # Hani.Test syllables bigram
     hani_syllables_bigram = bigram(hani_syllables_unigram)
     hani_syllables_bigram_count = counter(hani_syllables_bigram)
-    training_hani_syllables_bigram = new_training_set_with_UNK_optimized(training_syllables_bigram,
-                                                                         hani_syllables_bigram)
+    training_hani_syllables_bigram = new_training_set_with_UNK(training_syllables_bigram,
+                                                               hani_syllables_bigram)
     training_hani_syllables_bigram_count = counter(training_hani_syllables_bigram)
     hani_syllables_bigram_entropy = entropy(*hani_syllables_bigram_count)
     hani_syllables_bigram_cross_entropy = cross_entropy(*training_hani_syllables_bigram_count,
