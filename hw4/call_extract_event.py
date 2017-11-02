@@ -53,41 +53,46 @@ def extract_vocab(event_list, n=100):
     #               'the',    'www','was']
     stopwords = nltk.corpus.stopwords.words('english')
     vocab = Counter()
-    # for (s_inst, sense) in event_list:
-    #     for (i,item) in enumerate(s_inst.context):
-    #         #if i == int(s_inst.position):
-    #         #    continue
-    #         (item, wd, pos) = get_lex_components(item)
-    #         if wd in stopwords:
-    #             continue
-    #         if item in ['look_NN', 'work_NN', 'get_NN', 'take_NN', 'hard_NN', "'s_VBZ"]:
-    #             continue
-    #         if pos in ['PRP','IN','CC','DT']:
-    #             continue
-    #         vocab[item] += 1
+    selected_features = ['look_NN', 'work_NN', 'get_NN', 'take_NN', 'hard_NN', "'s_VBZ", 'surface_NN',
+                         'rock_NN', 'feeling_NN', 'get_VB', 'take_VB', 'hard_JJ']
+    for (s_inst, sense) in event_list:
+        for (i,item) in enumerate(s_inst.context):
+            #if i == int(s_inst.position):
+            #    continue
+            (item, wd, pos) = get_lex_components(item)
+            if wd in stopwords:
+                continue
+            if item in selected_features:
+                continue
+            if pos in ['PRP','IN','CC','DT']:
+                continue
+            vocab[item] += 1
     il = vocab.items()
     il.sort(key=lambda x: x[1],reverse=True)
     il = il[:n]
     vocab = dict(il)
 
-    vocab['look_NN'] = 1000
-    vocab['work_NN'] = 1000
-    vocab['get_NN'] = 1000
-    vocab['take_NN'] = 1000
-    vocab['hard_NN'] = 1000
-    vocab["'s_VBZ"] = 1000
+    for feature in selected_features:
+        vocab[feature] = 1000
+    # vocab['look_NN'] = 1000
+    # vocab['work_NN'] = 1000
+    # vocab['get_NN'] = 1000
+    # vocab['take_NN'] = 1000
+    # vocab['hard_NN'] = 1000
+    # vocab["'s_VBZ"] = 1000
     # vocab['cushion_NN'] = 1000
     # vocab['soft_JJ'] = 1000
     # vocab['cover_NN'] = 1000
 
-    vocab['surface_NN'] = 1000
-    vocab['rock_NN'] = 1000
-    vocab['feeling_NN'] = 1000
-    vocab['get_VB'] = 1000
-    vocab['take_VB'] = 1000
-    vocab['hard_JJ'] = 1000
+    # vocab['surface_NN'] = 1000
+    # vocab['rock_NN'] = 1000
+    # vocab['feeling_NN'] = 1000
+    # vocab['get_VB'] = 1000
+    # vocab['take_VB'] = 1000
+    # vocab['hard_JJ'] = 1000
 
     return vocab
+
 
 def get_lex_components (item):
     [wd,pos] = item.split('_')
