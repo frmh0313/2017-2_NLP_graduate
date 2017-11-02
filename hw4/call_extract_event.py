@@ -153,7 +153,8 @@ if __name__ == '__main__':
 
     ## Extract the 100 most frequent vocab words from the events
     ## and store as a dictionary.
-    vocab_size = 100
+    # vocab_size = 100
+    vocab_size = 200
     vocab_set = 'hand'
     event_file = 'senseval-%s.evt' % (word,)
 
