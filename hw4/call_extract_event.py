@@ -57,28 +57,26 @@ def extract_vocab(event_list, n=100):
                          "'s_VBZ", 'surface_NN', 'rock_NN', 'feeling_NN', 'get_VB', 'take_VB', 'hard_JJ',
                          'find_VB', 'board_NN', 'cover_NN', 'soft_JJ', 'cushion_NN',
                          'line_NN', 'harder_JJ', 'taking_VBZ', 'tell_VB', 'put_VB', 'long_JJ', 'water_NN', '-_:', 'right_NN']
-    # for (s_inst, sense) in event_list:
-    #     for (i,item) in enumerate(s_inst.context):
-    #         #if i == int(s_inst.position):
-    #         #    continue
-    #         (item, wd, pos) = get_lex_components(item)
-    #         if wd in stopwords:
-    #             continue
-    #         if item in selected_features:
-    #             continue
-    #         if pos in ['PRP','IN','CC','DT']:
-    #             continue
-    #         vocab[item] += 1
+    for (s_inst, sense) in event_list:
+        for (i,item) in enumerate(s_inst.context):
+            #if i == int(s_inst.position):
+            #    continue
+            (item, wd, pos) = get_lex_components(item)
+            if wd in stopwords:
+                continue
+            if item in selected_features:
+                continue
+            if pos in ['PRP','IN','CC','DT']:
+                continue
+            vocab[item] += 1
 
     il = vocab.items()
     il.sort(key=lambda x: x[1],reverse=True)
     il = il[:n]
     vocab = dict(il)
 
-    for feature in selected_features:
-        vocab[feature] = 1000
-    # vocab['cushion_NN'] = 1000
-    # vocab['soft_JJ'] = 1000
+    # for feature in selected_features:
+    #     vocab[feature] = 1000
     return vocab
 
 
