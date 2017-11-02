@@ -46,19 +46,18 @@ def extract_vocab(event_list, n=100):
     """
     # Google's stoplist with most preps removed. "and" added, word added
     import nltk
-    stopwords = [ 'I',    'a',    'an',    'are',    'as',    'and',
-                  'be',    'com',   'how',  'is',    'it',    'of',    'or',
-                  'that',    'the',  'this',    'was',    'what',
-                  'when',   'where',    'who',    'will',    'with',
-                  'the',    'www','was']
-    # stopwords = nltk.corpus.stopwords.words('english')
+    # stopwords = [ 'I',    'a',    'an',    'are',    'as',    'and',
+    #               'be',    'com',   'how',  'is',    'it',    'of',    'or',
+    #               'that',    'the',  'this',    'was',    'what',
+    #               'when',   'where',    'who',    'will',    'with',
+    #               'the',    'www','was']
+    stopwords = nltk.corpus.stopwords.words('english')
     vocab = Counter()
     for (s_inst, sense) in event_list:
         for (i,item) in enumerate(s_inst.context):
             #if i == int(s_inst.position):
             #    continue
             (item, wd, pos) = get_lex_components(item)
-            print item, wd, pos
             if wd in stopwords:
                 continue
             if pos in ['PRP','IN','CC','DT']:
