@@ -1,3 +1,4 @@
+#-*-coding: utf-8 -*-
 import itertools,sys
 from collections import Counter
 from extract_event import EventEncoder, TrainingInst
@@ -46,37 +47,40 @@ def extract_vocab(event_list, n=100):
     """
     # Google's stoplist with most preps removed. "and" added, word added
     import nltk
-    # stopwords = [ 'I',    'a',    'an',    'are',    'as',    'and',
-    #               'be',    'com',   'how',  'is',    'it',    'of',    'or',
-    #               'that',    'the',  'this',    'was',    'what',
-    #               'when',   'where',    'who',    'will',    'with',
-    #               'the',    'www','was']
-    stopwords = nltk.corpus.stopwords.words('english')
+    stopwords = [ 'I',    'a',    'an',    'are',    'as',    'and',
+                  'be',    'com',   'how',  'is',    'it',    'of',    'or',
+                  'that',    'the',  'this',    'was',    'what',
+                  'when',   'where',    'who',    'will',    'with',
+                  'the',    'www','was']
+    # stopwords = nltk.corpus.stopwords.words('english')
     vocab = Counter()
     selected_features = ['look_NN', 'work_NN', 'get_NN', 'take_NN', 'hard_NN',
                          "'s_VBZ", 'surface_NN', 'rock_NN', 'feeling_NN', 'get_VB', 'take_VB', 'hard_JJ',
-                         'find_VB', 'board_NN', 'cover_NN', 'soft_JJ', 'cushion_NN',
-                         'line_NN', 'harder_JJ', 'taking_VBZ', 'tell_VB', 'put_VB', 'long_JJ', 'water_NN', '-_:', 'right_NN']
-    for (s_inst, sense) in event_list:
-        for (i,item) in enumerate(s_inst.context):
-            #if i == int(s_inst.position):
-            #    continue
-            (item, wd, pos) = get_lex_components(item)
-            if wd in stopwords:
-                continue
-            if item in selected_features:
-                continue
-            if pos in ['PRP','IN','CC','DT']:
-                continue
-            vocab[item] += 1
+                         'find_VB', 'board_NN', 'cover_NN', 'soft_JJ',
+                         'taking_VBG', 'put_VB', '_:',
+                         'harder_JJ', 'long_JJ',
+                         'big_JJ',
+                         ]
+    # for (s_inst, sense) in event_list:
+    #     for (i,item) in enumerate(s_inst.context):
+    #         #if i == int(s_inst.position):
+    #         #    continue
+    #         (item, wd, pos) = get_lex_components(item)
+    #         if wd in stopwords:
+    #             continue
+    #         if item in selected_features:
+    #             continue
+    #         if pos in ['PRP','IN','CC','DT']:
+    #             continue
+    #         vocab[item] += 1
 
     il = vocab.items()
     il.sort(key=lambda x: x[1],reverse=True)
     il = il[:n]
     vocab = dict(il)
 
-    # for feature in selected_features:
-    #     vocab[feature] = 1000
+    for feature in selected_features:
+        vocab[feature] = 1
     return vocab
 
 
