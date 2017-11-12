@@ -26,6 +26,7 @@ if __name__ == '__main__':
     default_tag='' ## tag with best overall count
     try:
         fsock_train=open(training_file,'r',0)
+        # fsock_train = open(training_file, 'r').read()
         print >> sys.stderr, 'Reading %s' % training_file
         word_tag_matrix={}  ## word tag pair counts
         ## For word tag pairs, each key-value pair: a pair of a word and a tag
@@ -40,12 +41,15 @@ if __name__ == '__main__':
         ## tag_count[tag]=tag_count.get(tag,0)+1
         best_tag_count={} ## store count of best tag for word
         for line in fsock_train:
+             line = line.replace('\t', '<s>/<s> ')
              # splitline=line.rstrip().split()
              splitline = line.split()
+             # print splitline
              # split(' ') differs from split().
              # The latter handles consecutive spaces as we'd like
              if len(splitline)>0:
-                 for elem in splitline:  ## Each elem shd be a word_tag pair connected by "_" 
+                 for elem in splitline:  ## Each elem shd be a word_tag pair connected by "_"
+                     print 'elem: ', elem
                      wt_pair=elem.split('/')
                      if len(wt_pair)==2:
                          (word,tag)=wt_pair
@@ -56,8 +60,14 @@ if __name__ == '__main__':
                          (word,tag) = (wt_pair[0]+wt_pair[1], wt_pair[2])
                          word_tag_matrix[word, tag]=word_tag_matrix.get((word, tag), 0) + 1
                          tag_count[tag] = tag_count.get(tag, 0) + 1
+                     # elif len(wt_pair)==1:
+                     #     (word, tag) = ('<s>', '<s>')
+                     #     word_tag_matrix[word, tag]=word_tag_matrix.get((word, tag), 0) + 1
+                     #     tag_count[tag] = tag_count.get(tag, 0) + 1
+
                      else: print >> sys.stderr, 'Ill formed word/tag pair ', wt_pair
-             else: continue
+             else:
+                 continue
         fsock_train.close()
         print >> sys.stderr, 'Computing best tags'
         for wt_pair in word_tag_matrix.keys():
@@ -77,24 +87,32 @@ if __name__ == '__main__':
         print >> sys.stderr, "Unable to open %s" % training_file
     try:
         fsock_test=open(test_file,'r',0)
+        # fsock_test = open(test_file, 'r').read()
         print >> sys.stderr, 'Reading %s' % test_file
         for line in fsock_test:
+             line = line.replace('\t', '<s> ')
              splitline=line.rstrip().split(' ')
              if len(splitline)>0:
                  for word in splitline:  ## Each word shd be an untagged word
                      tag=best_tag.get(word,0)
-                     if tag:
+                     if tag == '<s>':
+                         continue
+                     elif tag:
+                         # print 'word: ', word
                          print '%s_%s' % (word, tag),
                          # print "%s_%s" % (word, tag) adds a carriage return each time
                          # Python string magic:  '%s_%s ' % (word, tag) evaluates  to the string we want.
                          # print word + '_' + tag + ' ' # '+': concatenate operator, alt syntax
                          # See Dive into Python, Section 3.5
-                         # Alternative: 
-                         # sys.stdout.write('%s_%s ' % (word, tag)) 
+                         # Alternative:
+                         # sys.stdout.write('%s_%s ' % (word, tag))
                          # sys.stdout is the Python filelike object corresponding to STDOUT
                      elif default_tag:
+                         # print 'default_tag: '
                          print '%s_%s ' % (word, default_tag),
-                     else: print '%s_dunno ' % word, # we didnt find the training file.
+                     else:
+                         # print 'dunno word: ', word
+                         print '%s_dunno ' % word, # we didnt find the training file.
                  print '\n',
         fsock_test.close()
     except IOError:
