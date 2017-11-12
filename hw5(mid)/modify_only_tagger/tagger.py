@@ -52,10 +52,10 @@ if __name__ == '__main__':
                          word_tag_matrix[word,tag]=word_tag_matrix.get((word,tag),0) + 1
                          tag_count[tag]=tag_count.get(tag,0)+1
                          # print (word,tag)
-                     elif len(wt_pair)==3:
-                         (word,tag) = (wt_pair[0]+wt_pair[1], wt_pair[2])
-                         word_tag_matrix[word, tag]=word_tag_matrix.get((word, tag), 0) + 1
-                         tag_count[tag] = tag_count.get(tag, 0) + 1
+                     # elif len(wt_pair)==3:
+                     #     (word,tag) = (wt_pair[0]+wt_pair[1], wt_pair[2])
+                     #     word_tag_matrix[word, tag]=word_tag_matrix.get((word, tag), 0) + 1
+                     #     tag_count[tag] = tag_count.get(tag, 0) + 1
                      else: print >> sys.stderr, 'Ill formed word/tag pair ', wt_pair
              else: continue
         fsock_train.close()
